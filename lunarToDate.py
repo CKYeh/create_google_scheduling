@@ -47,16 +47,24 @@ def lunarDateToDate(year, lunar_month, lunar_day):
 
 
 def create_google_calendar(Subject, Start_Date, End_Date, isAll_Day_Event, Start_Time, End_Time, Location, Description,isPrivate):
-	print (Subject + ",", end = "")
-	print (Start_Date + ",", Start_Time + ",", end = "")
-	print (End_Date + ",", End_Time + ",", end = "")
-	print (str(isAll_Day_Event) + "," + Description + ",", end = "")
-	print (str(isPrivate) + "," + Location)
-	return
+	string = str(Subject + ",")
+	string = string + str(Start_Date + "," + Start_Time + "," + Subject + ",")
+	string = string + str(End_Date + "," + End_Time + ",")
+	string = string + str(str(isAll_Day_Event) + "," + Description + ",")
+	string = string + str(str(isPrivate) + "," + Location + "\r\n")
+	return string
 
+f = open("schedule.csv", "w")
 google_calendar_title = ', '.join(GOOGLE_CALENDAR_TITLE)
-print(google_calendar_title)
+f.write(google_calendar_title + str("\r\n"))
+
 
 for i in range(REPEAT_NUMBER):
 	solarDate = lunarDateToDate(START_LUNAR_DAY["year"] + i, START_LUNAR_DAY["month"], START_LUNAR_DAY["day"])
-	create_google_calendar(SUBJECT, solarDate, solarDate, IS_ALL_DAY_EVENT, "12:00 PM", "01:30 PM", LOCATION, DESCRIPTION, IS_Private_SCHEDULE)
+	schedule = create_google_calendar(SUBJECT, solarDate, solarDate, IS_ALL_DAY_EVENT, "12:00 PM", "01:30 PM", LOCATION, DESCRIPTION, IS_Private_SCHEDULE)
+	print (schedule, end = "")
+	f.write(schedule)
+
+
+print ("schedule.csv file created.")
+f.close()
